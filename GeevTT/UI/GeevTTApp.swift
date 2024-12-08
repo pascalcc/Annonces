@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct GeevTTApp: App {
+    
+    let ads = Ads()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListingView(ads: ads)
         }
     }
 }
