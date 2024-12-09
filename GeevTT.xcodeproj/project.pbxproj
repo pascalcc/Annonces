@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0B162012D074064000CBC46 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C0B162002D074064000CBC46 /* RxSwift */; };
 		C0C8A8922D05BC4700E4669B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C0C8A8912D05BC4700E4669B /* Alamofire */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0B162012D074064000CBC46 /* RxSwift in Frameworks */,
 				C0C8A8922D05BC4700E4669B /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,6 +120,7 @@
 			name = GeevTT;
 			packageProductDependencies = (
 				C0C8A8912D05BC4700E4669B /* Alamofire */,
+				C0B162002D074064000CBC46 /* RxSwift */,
 			);
 			productName = GeevTT;
 			productReference = C0C8A8632D05B9A600E4669B /* GeevTT.app */;
@@ -202,6 +205,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				C0C8A8902D05BC4600E4669B /* XCRemoteSwiftPackageReference "Alamofire" */,
+				C0B161FF2D074064000CBC46 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C0C8A8642D05B9A600E4669B /* Products */;
@@ -582,6 +586,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C0B161FF2D074064000CBC46 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.8.0;
+			};
+		};
 		C0C8A8902D05BC4600E4669B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -593,6 +605,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C0B162002D074064000CBC46 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C0B161FF2D074064000CBC46 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
 		C0C8A8912D05BC4700E4669B /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C0C8A8902D05BC4600E4669B /* XCRemoteSwiftPackageReference "Alamofire" */;

@@ -14,6 +14,7 @@ struct Ad: Identifiable {
     let distance: Int
     let createdAt: Double
     let reserved: Bool
+
     let ui_index: Int
 }
 
@@ -23,11 +24,8 @@ extension Ad {
     func formattedTime() -> String {
         let created = Date(timeIntervalSince1970: createdAt)
         let elasped = -Int(created.timeIntervalSinceNow)
-        
+
         let minutes = elasped / 60
-        if minutes < 1 {
-            return "<\(minutes)min"
-        }
         if minutes < 60 {
             return "\(minutes)min"
         }
@@ -40,11 +38,14 @@ extension Ad {
     }
 
     func formattedDistance() -> String {
-        
         if distance < 1000 {
             return "\(distance)m"
         }
-        return "\(Double(distance / 100) / 10.0) km"
+
+        return "\(Double(distance / 100) / 10.0) km".replacingOccurrences(
+            of: ".",
+            with: ","
+        )
     }
 
 }

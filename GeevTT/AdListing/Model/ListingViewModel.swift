@@ -9,7 +9,7 @@ import Combine
 import UIKit
 
 @MainActor
-class Ads: ObservableObject {
+public class ListingViewModel: ObservableObject {
     private enum Pagination {
         case notStarted
         case next(String)
@@ -50,7 +50,7 @@ class Ads: ObservableObject {
         guard more else { return }
 
         pagination = .pending
-        Loader.loadListing(after: after, nextIndex: loaded.count) { response in
+        NetworkLoader.loadListing(after: after, nextIndex: loaded.count) { response in
             switch response {
             case .success(let (ads, next)):
                 self.pagination = next.map { .next($0) } ?? .complete

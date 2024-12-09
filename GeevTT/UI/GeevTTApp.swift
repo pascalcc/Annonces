@@ -10,11 +10,11 @@ import SwiftUI
 @main
 struct GeevTTApp: App {
     
-    let ads = Ads()
+    let ads = ListingViewModel()
     
     var body: some Scene {
         WindowGroup {
-            ListingView(ads: ads)
+            ListingView(viewModel: ads)
         }
     }
 }

@@ -7,51 +7,66 @@
 
 import SwiftUI
 
-struct ListingView: View {
+public struct ListingView: View {
 
-    @StateObject var ads: Ads
+    @StateObject var viewModel: ListingViewModel
 
     private static let spacing = 14.0
-    private let columns = [
+    private static let columns = [
         GridItem(.flexible(), spacing: spacing),
         GridItem(.flexible()),
     ]
 
-    var body: some View {
+    @State private var adDetail: Ad? = nil
+
+    public var body: some View {
 
         ScrollView {
-            LazyVGrid(columns: columns, spacing: Self.spacing) {
-                ForEach(ads.loaded) { ad in
-                    AdThumbnail(ad: ad).task {
-                        ads.preload(ad.ui_index)
+            LazyVGrid(columns: Self.columns, spacing: Self.spacing) {
+                ForEach(viewModel.loaded) { ad in
+                    Thumbnail(ad: ad).task {
+                        viewModel.preload(ad.ui_index)
+                    }.onTapGesture {
+                        //TODO with Coordinator?
+                        adDetail = ad
                     }
+
                 }
             }
             .padding(.horizontal, Self.spacing)
         }
         .background(Color("ListingBack"))
         .refreshable {
-            ads.refresh()
+            viewModel.refresh()
         }
         .onAppear {
-            ads.refresh()
+            viewModel.refresh()
+        }
+        .fullScreenCover(
+            item: $adDetail,
+            onDismiss: { adDetail = nil }
+        ) { ad in
+            DetailView(viewModel: DetailViewModel(id: ad.id))
         }
     }
+
 }
 
-struct AdThumbnail: View {
+struct Thumbnail: View {
 
     let ad: Ad
 
     fileprivate static let spacing = 6.0
-    fileprivate static let spacingText = 10.0
     fileprivate static let rounded = 8.0
 
     var body: some View {
         VStack(alignment: .leading, spacing: Self.spacing) {
-            TopImage(ad: ad)
-            Description(ad: ad)
-            InfosView(ad: ad)
+            TopImage(imageUrl: ad.thumbnailURL, isReserved: ad.reserved)
+            Description(text: ad.title)
+            InfosView(
+                time: ad.formattedTime(),
+                distance: ad.formattedDistance()
+            )
         }
         .background(.white)
         .cornerRadius(Self.rounded)
@@ -59,25 +74,29 @@ struct AdThumbnail: View {
             RoundedRectangle(cornerRadius: Self.rounded)
                 .stroke(Color("ListingBorder"))
         }
-        .onTapGesture {
-            //TODO with Coordinator
-            print("selected \(ad.id)")
-        }
     }
 }
 
 struct TopImage: View {
 
-    let ad: Ad
+    let imageUrl: String
+    let isReserved: Bool
 
     var body: some View {
 
-        AsyncImage(url: URL(string: ad.thumbnailURL)) { image in
-            image.resizable()
-        } placeholder: {
-            ZStack {
-                Color("ListingBorder")
-                ProgressView()
+        AsyncImage(url: URL(string: imageUrl)) { phase in
+            switch phase {
+            case .empty:
+                ZStack {
+                    Color("ListingBorder")
+                    ProgressView()
+                }
+            case .success(let image):
+                image.resizable()
+            case .failure:
+                Color.white
+            @unknown default:
+                Color.white
             }
         }
         .frame(height: 170)
@@ -88,46 +107,49 @@ struct TopImage: View {
                     .font(.system(size: 14, weight: .regular))
                     .foregroundStyle(.white)
                     .background(.red)
-                    .opacity(ad.reserved ? 1 : 0)
+                    .opacity(isReserved ? 1 : 0)
                     .offset(y: geometry.size.height - 25)
             }
-
         }
+
     }
 
 }
 
 struct Description: View {
 
-    let ad: Ad
+    let text: String
+
+    fileprivate static let spacingText = 10.0
 
     var body: some View {
 
         VStack(alignment: .leading) {
-            Text(ad.title)
+            Text(text)
                 .multilineTextAlignment(.leading)
                 .lineLimit(3)
                 .font(.system(size: 14, weight: .regular))
-                .padding(.leading, AdThumbnail.spacingText)
+                .padding(.leading, Self.spacingText)
             Spacer(minLength: 1)
         }
         .frame(height: 52)
-        .padding(.top, AdThumbnail.spacing)
+        .padding(.top, Thumbnail.spacing)
 
     }
 }
 
 struct InfosView: View {
 
-    let ad: Ad
+    let time: String
+    let distance: String
 
     var body: some View {
         HStack(alignment: .top) {
-            InfoView(info: .time, text: ad.formattedTime())
-            InfoView(info: .distance, text: ad.formattedDistance())
+            InfoView(info: .time, text: time)
+            InfoView(info: .distance, text: distance)
         }
-        .padding(AdThumbnail.spacing)
-        .padding(.leading, AdThumbnail.spacingText - AdThumbnail.spacing)
+        .padding(Thumbnail.spacing)
+        .padding(.leading, Description.spacingText - Thumbnail.spacing)
     }
 
 }
@@ -161,6 +183,5 @@ struct InfoView: View {
 }
 
 #Preview {
-    let ads = Ads()
-    ListingView(ads: ads)
+    ListingView(viewModel: ListingViewModel())
 }
