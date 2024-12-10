@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
 
-    @StateObject var coordinator : SwiftUICoordinator
+    @StateObject var coordinator: SwiftUICoordinator
 
     var body: some View {
         coordinator.buildListing().fullScreenCover(

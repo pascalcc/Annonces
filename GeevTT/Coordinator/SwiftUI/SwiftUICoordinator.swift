@@ -5,42 +5,39 @@
 //  Created by Pascal Costa-Cunha on 10/12/2024.
 //
 
-import UIKit
-import SwiftUI
-import AdListing
 import AdDetail
+import AdListing
+import SwiftUI
+import UIKit
 
 
-struct AdDetail : Identifiable {
-    let id: String
-}
+class SwiftUICoordinator: AppCoordinator, ObservableObject {
 
-class SwiftUICoordinator : AppCoordinator, ObservableObject {
+    @Published var showingDetail: AdDetailID?
 
-    @Published var showingDetail: AdDetail?
-    
     func start() -> UIViewController {
         let home = MainView(coordinator: self)
         return UIHostingController(rootView: home)
     }
 
-    //@ViewBuilder
     func buildListing() -> some View {
         ListingView(coordinator: self)
     }
-    
-    //@ViewBuilder
-    func buildDetail(id:String) -> some View {
+
+    func buildDetail(id: String) -> some View {
         DetailView(viewModel: DetailViewModel(id: id), coordinator: self)
     }
-        
+
     func presentDetail(id: String) {
-        showingDetail =  AdDetail(id: id)
+        assert(showingDetail == nil)
+        showingDetail = AdDetailID(id: id)
     }
 
     func dismissDetail() {
         showingDetail = nil
     }
+}
 
-    
+struct AdDetailID: Identifiable {
+    let id: String
 }

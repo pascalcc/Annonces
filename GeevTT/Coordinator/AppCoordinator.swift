@@ -9,10 +9,8 @@ import UIKit
 import AdDetail
 import AdListing
 
-protocol AppCoordinator : DetailCoordinator, ListingCoordinator {
-
+protocol AppCoordinator: DetailCoordinator, ListingCoordinator {
     func start() -> UIViewController
-    func presentDetail(id:String)
+    func presentDetail(id: String)
     func dismissDetail()
 }
-
