@@ -15,7 +15,8 @@ class UIKitCoordinator: AppCoordinator {
     private var viewControllers: [UIViewController] = []
 
     func start() -> UIViewController {
-        let home = UIHostingController(rootView: ListingView(coordinator: self))
+        let swiftui = ListingView(coordinator: self)
+        let home = UIHostingController(rootView: swiftui)
         viewControllers.append(home)
         return home
     }
@@ -23,11 +24,10 @@ class UIKitCoordinator: AppCoordinator {
     func presentDetail(id: String) {
         assert(viewControllers.count == 1)
 
-        let detail = DetailViewController(
-            DetailViewModel(id: id), coordinator: self)
+        let vm = DetailViewModel(id: id)
+        let detail = DetailViewController(vm, coordinator: self)
         detail.modalPresentationStyle = .fullScreen
         viewControllers.last!.present(detail, animated: true)
-
         viewControllers.append(detail)
     }
 
