@@ -7,7 +7,6 @@
 
 import RxSwift
 
-@MainActor
 public class DetailViewModel {
 
     private let id: String
@@ -18,7 +17,7 @@ public class DetailViewModel {
     var onLoaded: (() -> Void)?
     var onError: (() -> Void)?
 
-    init(id: String) {
+    public init(id: String) {
         self.id = id
     }
 

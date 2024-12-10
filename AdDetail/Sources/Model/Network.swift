@@ -8,6 +8,7 @@
 import Alamofire
 import RxSwift
 
+
 struct Network {
 
     static func detailAd(id: String) -> Single<AdDetail> {

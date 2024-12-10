@@ -7,16 +7,18 @@
 
 import SwiftUI
 import UIKit
+import AdDetail
+
 
 struct DetailView : UIViewControllerRepresentable {
     
     let viewModel : DetailViewModel
+    let coordinator : DetailCoordinator
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-        
     }
     
     func makeUIViewController(context: Context) -> some UIViewController {        
-        DetailViewController(viewModel)
+        DetailViewController(viewModel, coordinator: coordinator)
     }
 }

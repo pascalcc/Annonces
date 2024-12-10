@@ -10,7 +10,7 @@ import UIKit
 
 @MainActor
 public class ListingViewModel: ObservableObject {
-    private enum Pagination {
+    private enum Pagination : Equatable {
         case notStarted
         case next(String)
         case pending
@@ -20,7 +20,7 @@ public class ListingViewModel: ObservableObject {
     private var pagination: Pagination = .notStarted
 
     @Published private(set) var loaded: [Ad] = []
-
+    
     func refresh() {
         loaded.removeAll()
 
@@ -28,6 +28,13 @@ public class ListingViewModel: ObservableObject {
         loadMore()
     }
 
+    func autoload() {
+        if pagination == .notStarted {
+            loadMore()
+        }
+    }
+    
+    
     func preload(_ index: Int) {
         if index > loaded.count - 6 {
             loadMore()

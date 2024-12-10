@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C0B162012D074064000CBC46 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C0B162002D074064000CBC46 /* RxSwift */; };
-		C0C8A8922D05BC4700E4669B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C0C8A8912D05BC4700E4669B /* Alamofire */; };
+		C03B39642D08572B006F1012 /* AdDetail in Frameworks */ = {isa = PBXBuildFile; productRef = C03B39632D08572B006F1012 /* AdDetail */; };
+		C03B39BA2D087B8A006F1012 /* AdListing in Frameworks */ = {isa = PBXBuildFile; productRef = C03B39B92D087B8A006F1012 /* AdListing */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,14 +29,29 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C03B39652D0857E5006F1012 /* AdListing */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AdListing; sourceTree = "<group>"; };
+		C0AEB90A2D08463F00EA0ECC /* AdDetail */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AdDetail; sourceTree = "<group>"; };
 		C0C8A8632D05B9A600E4669B /* GeevTT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeevTT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0C8A8732D05B9A700E4669B /* GeevTTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeevTTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0C8A87D2D05B9A700E4669B /* GeevTTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeevTTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C03B39612D0856D8006F1012 /* Exceptions for "GeevTT" folder in "GeevTT" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C0C8A8622D05B9A600E4669B /* GeevTT */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C0C8A8652D05B9A600E4669B /* GeevTT */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C03B39612D0856D8006F1012 /* Exceptions for "GeevTT" folder in "GeevTT" target */,
+			);
 			path = GeevTT;
 			sourceTree = "<group>";
 		};
@@ -57,8 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0B162012D074064000CBC46 /* RxSwift in Frameworks */,
-				C0C8A8922D05BC4700E4669B /* Alamofire in Frameworks */,
+				C03B39BA2D087B8A006F1012 /* AdListing in Frameworks */,
+				C03B39642D08572B006F1012 /* AdDetail in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +97,8 @@
 		C0C8A85A2D05B9A600E4669B = {
 			isa = PBXGroup;
 			children = (
+				C03B39652D0857E5006F1012 /* AdListing */,
+				C0AEB90A2D08463F00EA0ECC /* AdDetail */,
 				C0C8A8652D05B9A600E4669B /* GeevTT */,
 				C0C8A8762D05B9A700E4669B /* GeevTTTests */,
 				C0C8A8802D05B9A700E4669B /* GeevTTUITests */,
@@ -119,8 +136,8 @@
 			);
 			name = GeevTT;
 			packageProductDependencies = (
-				C0C8A8912D05BC4700E4669B /* Alamofire */,
-				C0B162002D074064000CBC46 /* RxSwift */,
+				C03B39632D08572B006F1012 /* AdDetail */,
+				C03B39B92D087B8A006F1012 /* AdListing */,
 			);
 			productName = GeevTT;
 			productReference = C0C8A8632D05B9A600E4669B /* GeevTT.app */;
@@ -204,8 +221,6 @@
 			mainGroup = C0C8A85A2D05B9A600E4669B;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				C0C8A8902D05BC4600E4669B /* XCRemoteSwiftPackageReference "Alamofire" */,
-				C0B161FF2D074064000CBC46 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C0C8A8642D05B9A600E4669B /* Products */;
@@ -411,16 +426,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"GeevTT/assets/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 79R224R3TL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = GeevTT/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -433,6 +448,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -445,16 +461,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"GeevTT/assets/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 79R224R3TL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = GeevTT/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -467,6 +483,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -585,35 +602,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		C0B161FF2D074064000CBC46 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.8.0;
-			};
-		};
-		C0C8A8902D05BC4600E4669B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		C0B162002D074064000CBC46 /* RxSwift */ = {
+		C03B39632D08572B006F1012 /* AdDetail */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C0B161FF2D074064000CBC46 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
+			productName = AdDetail;
 		};
-		C0C8A8912D05BC4700E4669B /* Alamofire */ = {
+		C03B39B92D087B8A006F1012 /* AdListing */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C0C8A8902D05BC4600E4669B /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
+			productName = AdListing;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

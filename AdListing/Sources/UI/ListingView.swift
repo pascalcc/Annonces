@@ -9,16 +9,19 @@ import SwiftUI
 
 public struct ListingView: View {
 
-    @StateObject var viewModel: ListingViewModel
-
+    @StateObject var viewModel = ListingViewModel()
+    private let coordinator: ListingCoordinator
+    
     private static let spacing = 14.0
     private static let columns = [
         GridItem(.flexible(), spacing: spacing),
         GridItem(.flexible()),
     ]
 
-    @State private var adDetail: Ad? = nil
-
+    public init(coordinator: ListingCoordinator) {
+        self.coordinator = coordinator
+    }
+    
     public var body: some View {
 
         ScrollView {
@@ -27,10 +30,8 @@ public struct ListingView: View {
                     Thumbnail(ad: ad).task {
                         viewModel.preload(ad.ui_index)
                     }.onTapGesture {
-                        //TODO with Coordinator?
-                        adDetail = ad
+                        coordinator.presentDetail(id: ad.id)
                     }
-
                 }
             }
             .padding(.horizontal, Self.spacing)
@@ -40,13 +41,7 @@ public struct ListingView: View {
             viewModel.refresh()
         }
         .onAppear {
-            viewModel.refresh()
-        }
-        .fullScreenCover(
-            item: $adDetail,
-            onDismiss: { adDetail = nil }
-        ) { ad in
-            DetailView(viewModel: DetailViewModel(id: ad.id))
+            viewModel.autoload()
         }
     }
 
@@ -183,5 +178,12 @@ struct InfoView: View {
 }
 
 #Preview {
-    ListingView(viewModel: ListingViewModel())
+    ListingView(coordinator: FakeCoordinator())
+}
+
+
+private struct FakeCoordinator : ListingCoordinator {
+    func presentDetail(id:String) {
+    }
+
 }

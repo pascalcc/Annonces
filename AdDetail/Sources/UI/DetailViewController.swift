@@ -11,16 +11,19 @@ import UIKit
 public class DetailViewController: UIViewController {
 
     let viewModel: DetailViewModel
+    let coordinator: DetailCoordinator
 
     required init?(coder: NSCoder) {
-        fatalError("use init(id:) instead")
+        fatalError("use init(vm:c:) instead")
     }
 
-    init(_ vm: DetailViewModel) {
+    public init(_ vm: DetailViewModel, coordinator c: DetailCoordinator) {
 
         viewModel = vm
+        coordinator = c
 
         super.init(nibName: nil, bundle: nil)
+        view.backgroundColor = .white
 
         viewModel.onLoaded = { [weak self] in
             guard let self else { return }
@@ -29,38 +32,27 @@ public class DetailViewController: UIViewController {
 
         viewModel.onError = { [weak self] in
             guard let self else { return }
-            self.dismiss(animated: true)
+            self.coordinator.dismissDetail()
         }
 
         viewModel.fetchAd()
     }
 
-    private static let imageHeight = 350
-
-    public override func viewDidLoad() {
-        super.viewDidLoad()
+    public override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
         createEmpty()
     }
 
-    func addBackButton() -> CGRect {
-        let action = UIAction { [weak self] (action) in
-            guard let self else { return }
-            self.dismiss(animated: true)
-        }
-
-        let backImage = UIImage(named: "ios-arrow")!
-        let back = UIButton(
-            frame: CGRect(x: 0, y: 0, width: 40, height: 40),
-            primaryAction: action)
-        back.setImage(backImage.withTintColor(.white), for: .normal)
-        back.setImage(backImage.withTintColor(.gray), for: .highlighted)
-        view.addSubview(back)
-        return back.frame
-    }
+    private var isCreated = false
+    private static let imageHeight = 350
 
     func createEmpty() {
 
+        guard !isCreated else { return }
+        isCreated = true
+
         let fullWidth = Int(view.frame.width)
+
         let image = UIView(
             frame: CGRect(
                 x: 0,
@@ -75,19 +67,19 @@ public class DetailViewController: UIViewController {
         wheel.center = CGPoint(x: image.frame.midX, y: image.frame.midY)
         wheel.startAnimating()
         image.addSubview(wheel)
-
-        let _ = addBackButton()
+        addBackButton(over: image)
     }
 
-    func recreateWithContentLoaded() {
+    private func recreateWithContentLoaded() {
 
-        guard let ad = viewModel.ad else { return }
+        guard let ad = viewModel.ad else { fatalError("model not ready") }
 
         view.subviews.forEach { $0.removeFromSuperview() }
 
         let spacing = 12
         let fullWidth = Int(view.frame.width)
-
+        let fullHeight = Int(view.frame.height)
+        
         let swiftui = PagedImageView(images: viewModel.getImagesURL())
         let image = UIHostingController(rootView: swiftui).view!
         image.frame = CGRect(
@@ -119,7 +111,7 @@ public class DetailViewController: UIViewController {
                 x: spacing - innerSpacing,
                 y: posY,
                 width: fullWidth - 2 * (spacing - innerSpacing),
-                height: Int(view.frame.height) - posY - 5 * spacing
+                height: fullHeight - posY - Int(image.safeAreaInsets.bottom) - spacing
             )
         )
         description.isEditable = false
@@ -127,7 +119,7 @@ public class DetailViewController: UIViewController {
         description.font = UIFont.systemFont(ofSize: 15)
         view.addSubview(description)
 
-        let backFrame = addBackButton()
+        addBackButton(over: image)
 
         if ad.firstContact {
             let contact = UIButton(type: .custom)
@@ -140,12 +132,16 @@ public class DetailViewController: UIViewController {
             contact.titleLabel?.font = UIFont.systemFont(ofSize: 12)
             contact.sizeToFit()
 
-            contact.frame.size.height = 28
+            let contactHeight: CGFloat = 28
+            let margin: CGFloat = 8
+
+            contact.frame.size.height = contactHeight
             contact.frame.size.width += CGFloat(2 * spacing)
-                        
-            contact.center.y = backFrame.midY
-            contact.center.x = CGFloat(fullWidth) - contact.frame.size.width / 2
-                - contact.frame.minY
+
+            contact.center.y =
+                (contactHeight / 2) + image.safeAreaInsets.top + margin
+            contact.center.x =
+                CGFloat(fullWidth) - contact.frame.size.width / 2 - margin
 
             contact.layer.cornerRadius = 6
             contact.layer.borderWidth = 1
@@ -154,10 +150,29 @@ public class DetailViewController: UIViewController {
             let mainColor = UIColor.black
             contact.tintColor = mainColor
             contact.setTitleColor(mainColor, for: .normal)
-
             view.addSubview(contact)
         }
+    }
 
+    private func addBackButton(over: UIView) {
+        let action = UIAction { [weak self] (action) in
+            guard let self else { return }
+            self.coordinator.dismissDetail()
+        }
+
+        let backImage = UIImage(named: "ios-arrow")!
+        let back = UIButton(
+            frame: CGRect(
+                x: 0,
+                y: over.safeAreaInsets.top,
+                width: 40,
+                height: 40
+            ),
+            primaryAction: action
+        )
+        back.setImage(backImage.withTintColor(.white), for: .normal)
+        back.setImage(backImage.withTintColor(.gray), for: .highlighted)
+        view.addSubview(back)
     }
 
 }
