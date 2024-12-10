@@ -9,7 +9,7 @@ import Alamofire
 import CoreLocation
 import UIKit
 
-struct NetworkLoader {
+struct Network {
 
     typealias ListingResponse = ([Ad], String?)
 
@@ -67,13 +67,14 @@ extension Ad {
             longitude: json.location.longitude
         )
 
-        id = json._id
+        ad_id = json._id
         title = json.title
         thumbnailURL = json.pictures.first!.squares300
-        distance = Int(NetworkLoader.userLocation.distance(from: adLocation))
+        distance = Int(Network.userLocation.distance(from: adLocation))
         createdAt = Double(json.creationDateMs / 1_000)
         reserved = json.reserved
         ui_index = index
+        retry = false
     }
 
 }

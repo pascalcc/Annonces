@@ -10,7 +10,7 @@ import UIKit
 
 @MainActor
 public class ListingViewModel: ObservableObject {
-    private enum Pagination : Equatable {
+    private enum Pagination: Equatable {
         case notStarted
         case next(String)
         case pending
@@ -20,7 +20,16 @@ public class ListingViewModel: ObservableObject {
     private var pagination: Pagination = .notStarted
 
     @Published private(set) var loaded: [Ad] = []
-    
+
+    private var toRetry: Set<Int> = []
+
+    public init() {
+    }
+
+    func isLoading() -> Bool {
+        loaded.isEmpty && pagination != .notStarted
+    }
+
     func refresh() {
         loaded.removeAll()
 
@@ -28,17 +37,29 @@ public class ListingViewModel: ObservableObject {
         loadMore()
     }
 
-    func autoload() {
+    public func autoload() {
         if pagination == .notStarted {
+            loadMore()
+        } else {
+            if !toRetry.isEmpty {
+                var alls = loaded
+                for index in toRetry {
+                    alls[index] = loaded[index].retryCopy()
+                }
+                toRetry.removeAll()
+                loaded = alls
+            }
+        }
+    }
+
+    func preload(_ index: Int) {
+        if index > loaded.count - 8 {
             loadMore()
         }
     }
-    
-    
-    func preload(_ index: Int) {
-        if index > loaded.count - 6 {
-            loadMore()
-        }
+
+    func markToReload(_ index: Int) {
+        toRetry.insert(index)
     }
 
     private func haveMoreToLoad() -> (Bool, String?) {
@@ -57,7 +78,7 @@ public class ListingViewModel: ObservableObject {
         guard more else { return }
 
         pagination = .pending
-        NetworkLoader.loadListing(after: after, nextIndex: loaded.count) { response in
+        Network.loadListing(after: after, nextIndex: loaded.count) { response in
             switch response {
             case .success(let (ads, next)):
                 self.pagination = next.map { .next($0) } ?? .complete

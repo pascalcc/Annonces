@@ -19,7 +19,3 @@ struct MainView: View {
             }
     }
 }
-
-#Preview {
-    MainView(coordinator: SwiftUICoordinator())
-}

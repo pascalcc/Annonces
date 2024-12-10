@@ -15,7 +15,7 @@ class UIKitCoordinator: AppCoordinator {
     private var viewControllers: [UIViewController] = []
 
     func start() -> UIViewController {
-        let swiftui = ListingView(coordinator: self)
+        let swiftui = ListingView(ListingViewModel(), coordinator: self)
         let home = UIHostingController(rootView: swiftui)
         viewControllers.append(home)
         return home
@@ -32,8 +32,8 @@ class UIKitCoordinator: AppCoordinator {
     }
 
     func dismissDetail() {
+        guard viewControllers.count == 2 else { return }
         let current = viewControllers.removeLast()
-        assert(current is DetailViewController)
         current.dismiss(animated: true)
     }
 

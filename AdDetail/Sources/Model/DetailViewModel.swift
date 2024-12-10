@@ -7,10 +7,11 @@
 
 import RxSwift
 
+@MainActor
 public class DetailViewModel {
 
-    private let id: String
-    private(set) var ad: AdDetail! = nil
+    private let ad_id: String
+    private(set) var ad: Ad! = nil
 
     private let disposeBag = DisposeBag()
 
@@ -18,11 +19,11 @@ public class DetailViewModel {
     var onError: (() -> Void)?
 
     public init(id: String) {
-        self.id = id
+        self.ad_id = id
     }
 
     func fetchAd() {
-        Network.detailAd(id: self.id).subscribe(
+        Network.detailAd(id: self.ad_id).subscribe(
             onSuccess: { [weak self] ad in
                 guard let self else { return }
                 self.ad = ad

@@ -8,7 +8,11 @@
 import Foundation
 
 struct Ad: Identifiable {
-    let id: String
+    var id: String {
+        retry ? ad_id : ad_id + "r"
+    }
+
+    let ad_id: String
     let title: String
     let thumbnailURL: String
     let distance: Int
@@ -16,11 +20,24 @@ struct Ad: Identifiable {
     let reserved: Bool
 
     let ui_index: Int
+    let retry: Bool
 }
 
-//MARK: - UI infos
-
 extension Ad {
+
+    func retryCopy() -> Ad {
+        Ad(
+            ad_id: ad_id,
+            title: title,
+            thumbnailURL: thumbnailURL,
+            distance: distance,
+            createdAt: createdAt,
+            reserved: reserved,
+            ui_index: ui_index,
+            retry: !retry
+        )
+    }
+
     func formattedTime() -> String {
         let created = Date(timeIntervalSince1970: createdAt)
         let elasped = -Int(created.timeIntervalSinceNow)

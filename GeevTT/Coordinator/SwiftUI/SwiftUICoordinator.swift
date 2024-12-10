@@ -10,10 +10,11 @@ import AdListing
 import SwiftUI
 import UIKit
 
-
 class SwiftUICoordinator: AppCoordinator, ObservableObject {
 
     @Published var showingDetail: AdDetailID?
+
+    var listingViewModel = ListingViewModel()
 
     func start() -> UIViewController {
         let home = MainView(coordinator: self)
@@ -21,11 +22,11 @@ class SwiftUICoordinator: AppCoordinator, ObservableObject {
     }
 
     func buildListing() -> some View {
-        ListingView(coordinator: self)
+        ListingView(listingViewModel, coordinator: self)
     }
 
     func buildDetail(id: String) -> some View {
-        DetailView(viewModel: DetailViewModel(id: id), coordinator: self)
+        DetailView(DetailViewModel(id: id), coordinator: self)
     }
 
     func presentDetail(id: String) {
@@ -35,6 +36,7 @@ class SwiftUICoordinator: AppCoordinator, ObservableObject {
 
     func dismissDetail() {
         showingDetail = nil
+        listingViewModel.autoload()
     }
 }
 

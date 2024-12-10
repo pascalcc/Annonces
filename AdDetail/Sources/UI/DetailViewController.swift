@@ -56,7 +56,7 @@ public class DetailViewController: UIViewController {
         let image = UIView(
             frame: CGRect(
                 x: 0,
-                y: 0,
+                y: Int(view.safeAreaInsets.top),
                 width: fullWidth,
                 height: Self.imageHeight
             ))
@@ -79,12 +79,12 @@ public class DetailViewController: UIViewController {
         let spacing = 12
         let fullWidth = Int(view.frame.width)
         let fullHeight = Int(view.frame.height)
-        
+
         let swiftui = PagedImageView(images: viewModel.getImagesURL())
         let image = UIHostingController(rootView: swiftui).view!
         image.frame = CGRect(
             x: 0,
-            y: 0,
+            y: Int(view.safeAreaInsets.top),
             width: fullWidth,
             height: Self.imageHeight
         )
@@ -111,12 +111,14 @@ public class DetailViewController: UIViewController {
                 x: spacing - innerSpacing,
                 y: posY,
                 width: fullWidth - 2 * (spacing - innerSpacing),
-                height: fullHeight - posY - Int(image.safeAreaInsets.bottom) - spacing
+                height: fullHeight - posY - Int(view.safeAreaInsets.bottom)
+                    - spacing
             )
         )
         description.isEditable = false
         description.text = ad.description
         description.font = UIFont.systemFont(ofSize: 15)
+        description.backgroundColor = .red
         view.addSubview(description)
 
         addBackButton(over: image)
@@ -138,8 +140,7 @@ public class DetailViewController: UIViewController {
             contact.frame.size.height = contactHeight
             contact.frame.size.width += CGFloat(2 * spacing)
 
-            contact.center.y =
-                (contactHeight / 2) + image.safeAreaInsets.top + margin
+            contact.center.y = (contactHeight / 2) + image.frame.minY + margin
             contact.center.x =
                 CGFloat(fullWidth) - contact.frame.size.width / 2 - margin
 
@@ -164,7 +165,7 @@ public class DetailViewController: UIViewController {
         let back = UIButton(
             frame: CGRect(
                 x: 0,
-                y: over.safeAreaInsets.top,
+                y: over.frame.minY,
                 width: 40,
                 height: 40
             ),
@@ -172,6 +173,12 @@ public class DetailViewController: UIViewController {
         )
         back.setImage(backImage.withTintColor(.white), for: .normal)
         back.setImage(backImage.withTintColor(.gray), for: .highlighted)
+
+        back.layer.shadowColor = UIColor.black.cgColor
+        back.layer.shadowRadius = 2
+        back.layer.shadowOpacity = 0.75
+        back.layer.shadowOffset = CGSize(width: 1, height: 1)
+
         view.addSubview(back)
     }
 

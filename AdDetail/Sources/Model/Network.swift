@@ -11,7 +11,7 @@ import RxSwift
 
 struct Network {
 
-    static func detailAd(id: String) -> Single<AdDetail> {
+    static func detailAd(id: String) -> Single<Ad> {
 
         let url = "https://prod.geev.fr/v1/api/v0.19/articles/\(id)"
 
@@ -22,7 +22,7 @@ struct Network {
                     response in
                     switch response.result {
                     case .success(let ad):
-                        let ad = AdDetail(fromJson: ad)
+                        let ad = Ad(fromJson: ad)
                         single(.success(ad))
                     case .failure(let error):
                         single(.failure(error))
@@ -34,7 +34,7 @@ struct Network {
 
 }
 
-extension AdDetail {
+extension Ad {
 
     init(fromJson json: Response) {
         let images = json.pictures.map {

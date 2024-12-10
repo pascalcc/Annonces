@@ -5,10 +5,11 @@
 //  Created by Pascal Costa-Cunha on 10/12/2024.
 //
 
-import UIKit
 import AdDetail
 import AdListing
+import UIKit
 
+@MainActor
 protocol AppCoordinator: DetailCoordinator, ListingCoordinator {
     func start() -> UIViewController
     func presentDetail(id: String)

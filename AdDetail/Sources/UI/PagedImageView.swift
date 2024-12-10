@@ -13,29 +13,41 @@ struct PagedImageView: View {
 
     var body: some View {
 
-        TabView {
-            ForEach(images) { image in
-                AsyncImage(url: URL(string: image.url)) { phase in
-                    switch phase {
-                    case .empty:
-                        ZStack {
-                            Color("ListingBorder")
-                            ProgressView()
-                        }
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    case .failure:
-                        Color.white
-                    @unknown default:
-                        Color.white
-                    }
+        if #available(iOS 16.0, *) {
+            TabView {
+                ForEach(images) { image in
+                    AutoLoadImage(url: image.url)
                 }
             }
+            .tabViewStyle(.page(indexDisplayMode: .always))
+        } else {
+            AutoLoadImage(url: images.first!.url)
         }
-        .tabViewStyle(.page(indexDisplayMode: .always))
 
+    }
+}
+
+struct AutoLoadImage: View {
+
+    let url: String
+
+    var body: some View {
+
+        AsyncImage(url: URL(string: url)) { phase in
+            switch phase {
+            case .empty:
+                ZStack {
+                    Color("ListingBorder")
+                    ProgressView()
+                }
+            case .success(let image):
+                image.resizable()
+            case .failure:
+                Color.white
+            @unknown default:
+                Color.white
+            }
+        }
     }
 }
 
