@@ -118,7 +118,6 @@ public class DetailViewController: UIViewController {
         description.isEditable = false
         description.text = ad.description
         description.font = UIFont.systemFont(ofSize: 15)
-        description.backgroundColor = .red
         view.addSubview(description)
 
         addBackButton(over: image)
