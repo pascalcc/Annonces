@@ -31,8 +31,9 @@ public class ListingViewModel: ObservableObject {
     }
 
     func refresh() {
-        loaded.removeAll()
+        guard pagination != .pending else { return }
 
+        loaded.removeAll()
         pagination = .notStarted
         loadMore()
     }

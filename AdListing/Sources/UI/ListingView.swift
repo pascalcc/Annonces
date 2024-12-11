@@ -23,8 +23,6 @@ public struct ListingView: View {
         coordinator = c
     }
 
-    @State private var isRefreshing = false
-
     public var body: some View {
 
         RefreshableScrollView(viewModel: viewModel) {
@@ -39,7 +37,6 @@ public struct ListingView: View {
             }
             .padding(.horizontal, Self.spacing)
         }
-
         .background(Color("ListingBack"))
         .overlay {
             ProgressView()
@@ -68,6 +65,9 @@ struct RefreshableScrollView<Content: View>: View {
     let content: () -> Content
 
     @State private var isRefreshing = false
+    @State private var pullProgress = 0.0
+
+    private let spaceName = "scroll"
 
     public var body: some View {
 
@@ -82,28 +82,43 @@ struct RefreshableScrollView<Content: View>: View {
 
         } else {
 
-            ScrollView {
-                content()
-            }
-            .background(
-                GeometryReader {
-                    Color.clear.preference(
-                        key: ViewOffsetKey.self,
-                        value: -$0.frame(in: .named("scroll")).origin.y)
-                }
-            )
-            .onPreferenceChange(ViewOffsetKey.self) {
-                if $0 < -100 && !isRefreshing {
-                    isRefreshing = true
-                    Task {
-                        viewModel.refresh()
-                        await MainActor.run {
-                            isRefreshing = false
+            ZStack {
+
+                ScrollView {
+                    content()
+                        .background(
+                            GeometryReader {
+                                Color.clear.preference(
+                                    key: ViewOffsetKey.self,
+                                    value: -$0.frame(in: .named(spaceName))
+                                        .origin.y)
+                            }
+                        )
+                        .onPreferenceChange(ViewOffsetKey.self) {
+                            guard $0 < 1 else { return }
+
+                            let newValue = $0 / -100.0
+                            pullProgress = min(newValue, 1)
+
+                            if $0 < -100 && !isRefreshing {
+                                isRefreshing = true
+                                viewModel.refresh()
+                            } else if $0 > -10 {
+                                pullProgress = 0
+                                isRefreshing = false
+                            }
                         }
-                    }
                 }
+                .coordinateSpace(name: spaceName)
+
+                VStack {
+                    Color.clear.frame(height: 10)
+                    ProgressView().scaleEffect(0.5 + pullProgress * 1)
+                    Spacer()
+                }
+                .opacity(isRefreshing || pullProgress > 0.1 ? 1 : 0)
+
             }
-            .coordinateSpace(name: "scroll")
         }
     }
 }
@@ -137,7 +152,7 @@ struct Thumbnail: View {
 struct TopImage: View {
 
     let ad: Ad
-    let toReload: (Int) -> ()
+    let toReload: (Int) -> Void
 
     var body: some View {
 
@@ -155,9 +170,7 @@ struct TopImage: View {
                     toReload(ad.ui_index)
                 }
             @unknown default:
-                Color.white.task {
-                    print("WHAT !!!")
-                }
+                Color.white
             }
         }
         .frame(height: 170)
