@@ -7,18 +7,19 @@
 
 import Alamofire
 import CoreLocation
-import UIKit
 
-struct Network {
+struct Network: DataLoader {
 
-    typealias ListingResponse = ([Ad], String?)
-
-    static func loadListing(
-        after: String? = nil,
-        nextIndex: Int = 0,
-        completion: @escaping (Result<ListingResponse, Error>) -> Void
+    func loadListing(
+        pagingInfo: PagingInfo,
+        completion: @escaping (
+            Result<ListingResponse, Error>
+        ) -> Void
     ) {
-        let url = after.map { "\(listingUrl)&after=\($0)" } ?? listingUrl
+        let url =
+            pagingInfo.afterId.map {
+                "\(Self.listingUrl)&after=\($0)"
+            } ?? Self.listingUrl
         AF.request(
             url,
             method: .post,
@@ -30,7 +31,10 @@ struct Network {
             case .success(let response):
                 let after = response.paging.after
                 let ads = response.data.enumerated().map { (index, json) in
-                    Ad(fromJson: json, withIndex: nextIndex + index)
+                    Ad(
+                        fromJson: json,
+                        withIndex: pagingInfo.next_ui_index + index
+                    )
                 }
                 completion(.success(ListingResponse(ads: ads, next: after)))
             case .failure(let error):

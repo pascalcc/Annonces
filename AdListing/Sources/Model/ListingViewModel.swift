@@ -17,17 +17,20 @@ public class ListingViewModel: ObservableObject {
         case complete
     }
 
-    private var pagination: Pagination = .notStarted
+    @Published private var pagination: Pagination = .notStarted
 
     @Published private(set) var loaded: [Ad] = []
 
     private var toRetry: Set<Int> = []
 
-    public init() {
+    private let container: ListingLoader
+
+    public init(container: ListingLoader = ListingLoader()) {
+        self.container = container
     }
 
-    func isLoading() -> Bool {
-        loaded.isEmpty && pagination != .notStarted
+    func isEmptyAndLoading() -> Bool {
+        loaded.isEmpty && pagination == .pending
     }
 
     func refresh() {
@@ -79,7 +82,10 @@ public class ListingViewModel: ObservableObject {
         guard more else { return }
 
         pagination = .pending
-        Network.loadListing(after: after, nextIndex: loaded.count) { response in
+
+        let pagingInfo = PagingInfo(afterId: after, next_ui_index: loaded.count)
+        container.dataLoader(.server).loadListing(pagingInfo: pagingInfo) {
+            response in
             switch response {
             case .success(let (ads, next)):
                 self.pagination = next.map { .next($0) } ?? .complete

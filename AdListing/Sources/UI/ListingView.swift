@@ -41,7 +41,7 @@ public struct ListingView: View {
         .overlay {
             ProgressView()
                 .scaleEffect(2.0)
-                .opacity(viewModel.loaded.isEmpty ? 1.0 : 0.0)
+                .opacity(viewModel.isEmptyAndLoading() ? 1.0 : 0.0)
         }
         .onAppear {
             viewModel.autoload()
@@ -69,7 +69,7 @@ struct RefreshableScrollView<Content: View>: View {
 
     private let spaceName = "scroll"
 
-    public var body: some View {
+    var body: some View {
 
         if #available(iOS 16.0, *) {
 

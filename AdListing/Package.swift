@@ -15,12 +15,14 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/Alamofire/Alamofire.git",
-            .upToNextMajor(from: "5.10.0"))
+            .upToNextMajor(from: "5.10.0")),
+        .package(
+            url: "https://github.com/Swinject/Swinject.git", from: "2.9.0"),
     ],
     targets: [
         .target(
             name: "AdListing",
-            dependencies: ["Alamofire"])
+            dependencies: ["Alamofire", "Swinject"])
     ],
     swiftLanguageModes: [.v5]
 
